@@ -1,18 +1,19 @@
-const fsp = require('fs').promises;
+const fs = require('fs');
 const filePath = '../inputs/2-input.txt';
-const file2a = require('./2a');
-const file2b = require('./2b');
+const file2a = require('./2a.js');
+const file2b = require('./2b.js');
 inputParser()
-async function inputParser() {
-    let listA = []
-    let listB = []
-    const input = await fsp.readFile(filePath, 'utf-8');
-    const rows = input.trim().split('\n');
-    rows.forEach(row => {
-        const [left, right] = row.trim().split(/\s+/);
-        listA.push(Number(left));
-        listB.push(Number(right));
-    });
-    await file2a.run(listA, listB)
-    await file2b.run(listA, listB)
+function inputParser() {
+    let safeReports = 0
+    const input = fs.readFileSync(filePath, 'utf-8');
+    let rows = input.trim().split('\n');
+    for (let i = 0; i < rows.length; i++) {
+        let row = rows[i]
+        let ans = file2a.run(row.trim().split(/\s+/))
+        // let ans = file2b.run(row.trim().split(/\s+/))
+        if (ans) {
+            safeReports = safeReports + 1
+        }
+    }
+    console.log("🚀 ~ file: parseInput.js:8 ~ safeReports:", safeReports)
 }
